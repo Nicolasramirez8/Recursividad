@@ -1,28 +1,32 @@
-def hanoi(n: int, origen: str, auxiliar: str, destino: str, paso: int = 1) -> int: 
+def hanoi(n, origen="O", auxiliar="A", destino="D"):
+    if n > 0:
+        # Paso 1: trasladar n-1 discos de la torre de origen a la auxiliar
+        hanoi(n - 1, origen, destino, auxiliar)
 
-    if n == 1:
-        print(f"Paso {paso}: mover disco desde {origen} hacia {destino}")
-        return paso + 1
+        # Paso 2: mover el disco mayor hacia la torre de destino
+        print(f" Mover disco {n} desde {origen} hasta {destino}")
+
+        # Paso 3: trasladar los n-1 discos restantes hacia la torre destino
+        hanoi(n - 1, auxiliar, origen, destino)
+
+
+try:
+    # Solicitar número de discos al usuario
+    discos = int(input("Digite la cantidad de discos a usar (mínimo 1 y máximo 10): "))
+
+    # Validaciones de rango
+    if discos < 1:
+        print("No se permiten menos de 1 disco.")
+    elif discos > 10:
+        print(" El límite de discos permitido es 10.")
     else:
-        paso = hanoi(n - 1, origen, destino, auxiliar, paso)
-        print(f"Paso {paso}: mover disco desde {origen} hacia {destino}")
-        paso += 1
-        paso = hanoi(n - 1, auxiliar, origen, destino, paso)
-        return paso
+        print(f"\n Iniciando simulación con {discos} discos:\n")
+        hanoi(discos)
+        print(f"\n Número mínimo de movimientos necesarios: {2**discos - 1}")
 
-def main():
-    try:
-        n = int(input("Ingrese el número de discos (1-20):"))
-        if n < 1 or n > 20:
-            raise ValueError("El número no está en el rango permitido")
-        
-        total = hanoi(n, "A", "B", "C", 1)
-        esperado = 2 ** n - 1
-
-    except ValueError as ve:
-        print(f"[Error de valor] {ve}")
-    except Exception as e:
-        print(f"[Error inesperado] {e}")
-
-if __name__ == "__main__":
-    main()
+except ValueError:
+    # Si el usuario no escribe un número entero válido
+    print(" Entrada inválida: debe ingresar un número entero dentro del rango.")
+except Exception as e:
+    # Para cualquier error no previsto
+    print(f" Error inesperado detectado: {e}")
